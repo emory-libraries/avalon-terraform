@@ -16,7 +16,7 @@ variable "availability_zone" {
 }
 
 variable "avalon_repo" {
-  default = "https://github.com/emory/avalon"
+  default = "https://github.com/emory-libraries/avalon"
 }
 
 variable "avalon_branch" {
@@ -142,4 +142,3 @@ locals {
     },
   )
 }
-
