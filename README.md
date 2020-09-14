@@ -93,3 +93,21 @@ The EC2 instances are sized to minimize cost and allow occasional bursts (mostly
 Cost can be further reduced by using [reserved instances](https://aws.amazon.com/ec2/pricing/reserved-instances/pricing/) - commiting to buy EC2 for months or years.
 
 Out of the box, the system can service up to 100 concurrent streaming users without serious performance degradation. More performance can be achieved by scaling up using a larger EC2 instance.
+
+# Upstream Changes
+
+Since this repository is a fork, work may happen in the upstream repository that we want to incorporate here.
+In order to do this, the `master` branch of this repository will track the `master` branch from avalonmediasystem, which can be set up as follows:
+
+1. Add avalonmediasystem/avalon-terraform as a new remote (called "upstream" here): ```git remote add upstream git@github.com:avalonmediasystem/avalon-terraform.git```
+2. Pull in info from that remote: `git fetch upstream`
+3. Ensure you are on our master branch: `git checkout master`
+4. Track the `master` branch from avalonmediasystem as the upstream branch of our `master` branch: `git branch -u upstream/master`
+
+Now when changes are made in avalonmediasystem/avalon-terraform's `master`, we can pull them in and push them to GitHub's `master` with three steps:
+
+1. Ensure you are on our master branch: `git checkout master`
+2. Pull in changes from avalonmediasystem: `git pull`
+3. Push changes to GitHub (assuming your GitHub remote is called "origin", as it is by default): `git push origin`
+
+It is important that the `master` branch only recieves updates from upstream, so that it can continue to fast-forward those changes in our repository.
