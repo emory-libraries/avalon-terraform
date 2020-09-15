@@ -24,11 +24,11 @@ variable "avalon_admin" {
 }
 
 variable "avalon_repo" {
-  default = "https://github.com/avalonmediasystem/avalon"
+  default = "https://github.com/emory-libraries/avalon"
 }
 
 variable "avalon_branch" {
-  default = "demo"
+  default = "master"
 }
 
 variable "bastion_instance_type" {
@@ -150,4 +150,3 @@ locals {
     },
   )
 }
-
