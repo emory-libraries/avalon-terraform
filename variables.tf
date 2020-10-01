@@ -150,3 +150,7 @@ locals {
     },
   )
 }
+
+variable "vpc_name" {
+  default = "VPC-Name" 
+}

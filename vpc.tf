@@ -2,7 +2,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.0.0"
 
-  name = "${local.namespace}-vpc"
+  name = var.vpc_name
 
   azs             = var.azs
   cidr            = var.vpc_cidr_block
