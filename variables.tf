@@ -151,6 +151,11 @@ locals {
   )
 }
 
-variable "vpc_name" {
-  default = "VPC-Name" 
+variable "vpc_id" {
+  type = string 
+}
+
+variable "subnet_tags" {
+  type = list(string)
+  default = ["Private Subnet 1", "Private Subnet 2", "Public Subnet 1"]
 }
