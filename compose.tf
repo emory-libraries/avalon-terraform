@@ -156,7 +156,6 @@ resource "aws_instance" "compose" {
   instance_type               = var.compose_instance_type
   key_name                    = var.ec2_keyname
   subnet_id                   = random_shuffle.random_subnet.result.0
-  associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.compose.name
   tags = merge(
     local.common_tags,
@@ -237,7 +236,7 @@ EOF
 
   provisioner "remote-exec" {
     connection {
-      host        = aws_instance.compose.public_dns
+      host        = aws_instance.compose.private_ip
       user        = "ec2-user"
       agent       = true
       timeout     = "10m"
@@ -276,7 +275,7 @@ resource "aws_s3_bucket_policy" "compose-s3" {
       "Action": "s3:GetObject",
       "Resource": "arn:aws:s3:::${aws_s3_bucket.this_derivatives.id}/*",
       "Condition": {
-         "IpAddress": {"aws:SourceIp": "${aws_instance.compose.public_ip}"}
+         "IpAddress": {"aws:SourceIp": "${aws_instance.compose.private_ip}"}
       }
     }
   ]
