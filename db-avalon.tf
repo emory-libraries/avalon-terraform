@@ -26,7 +26,7 @@ module "db_avalon" {
   copy_tags_to_snapshot   = true
 
   vpc_security_group_ids = [aws_security_group.db.id]
-  subnet_ids = module.vpc.private_subnets
+  subnet_ids = data.aws_subnet_ids.selected.ids
 
   tags = local.common_tags
   family = "postgres10"

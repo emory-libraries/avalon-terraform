@@ -26,7 +26,7 @@ module "db_fcrepo" {
   copy_tags_to_snapshot   = true
 
   vpc_security_group_ids = [aws_security_group.db.id]
-  subnet_ids = module.vpc.private_subnets
+  subnet_ids = data.aws_subnet_ids.selected.ids
   availability_zone = aws_instance.compose.availability_zone
 
   tags = local.common_tags

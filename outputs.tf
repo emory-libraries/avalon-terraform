@@ -114,17 +114,14 @@ output "db_fcrepo_password" {
   value = module.db_fcrepo.this_db_instance_password
 }
 
-output "private_subnets" {
-  value = module.vpc.private_subnets
+output "selected_subnets" {
+  value = data.aws_subnet_ids.selected.ids
 }
 
 output "private_zone_id" {
   value = module.dns.private_zone_id
 }
 
-output "public_subnets" {
-  value = module.vpc.public_subnets
-}
 
 output "public_zone_id" {
   value = module.dns.public_zone_id
@@ -134,11 +131,4 @@ output "public_zone_id" {
 #   value = "http://${aws_route53_record.fcrepo.name}/rest"
 # }
 # 
-# output "send_email_policy_arn" {
-#   value = "${aws_iam_policy.send_email.arn}"
-# }
-
-output "vpc_id" {
-  value = module.vpc.vpc_id
-}
 

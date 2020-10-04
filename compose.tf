@@ -67,8 +67,6 @@ data "aws_iam_policy_document" "compose_api_access" {
       "elastictranscoder:ReadJob",
       "elastictranscoder:CancelJob",
       "s3:*",
-      "ses:SendEmail",
-      "ses:SendRawEmail",
       "cloudwatch:PutMetricData",
       "ssm:Get*",
       "logs:CreateLogGroup",
@@ -100,7 +98,7 @@ resource "aws_iam_role_policy_attachment" "compose_ecr" {
 resource "aws_security_group" "compose" {
   name        = "${local.namespace}-compose"
   description = "Compose Host Security Group"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
   tags        = local.common_tags
 }
 
@@ -157,7 +155,7 @@ resource "aws_instance" "compose" {
   ami                         = data.aws_ami.amzn.id
   instance_type               = var.compose_instance_type
   key_name                    = var.ec2_keyname
-  subnet_id                   = module.vpc.public_subnets[0]
+  subnet_id                   = random_shuffle.random_subnet.result.0
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.compose.name
   tags = merge(

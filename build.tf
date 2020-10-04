@@ -71,11 +71,7 @@ resource "aws_iam_role_policy" "build" {
       ],
       "Condition": {
         "StringEquals": {
-          "ec2:Subnet": [
-            "${module.vpc.private_subnet_arns[0]}",
-            "${module.vpc.private_subnet_arns[1]}",
-            "${module.vpc.private_subnet_arns[2]}"
-          ],
+          "ec2:Subnet": ${[for s in data.aws_subnet.selected : s.arn ]}
           "ec2:AuthorizedService": "codebuild.amazonaws.com"
         }
       }
@@ -163,8 +159,8 @@ BUILDSPEC
   }
 
   vpc_config {
-    vpc_id             = module.vpc.vpc_id
-    subnets            = module.vpc.private_subnets
+    vpc_id             = var.vpc_id
+    subnets            = data.aws_subnet_ids.selected.ids
     security_group_ids = [aws_security_group.compose.id]
   }
 

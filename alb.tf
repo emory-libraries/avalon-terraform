@@ -1,6 +1,6 @@
 resource "aws_alb" "alb" {
   name = "${local.namespace}-alb"
-  subnets         = module.vpc.public_subnets
+  subnets         = data.aws_subnet_ids.selected.ids
   security_groups = [aws_security_group.alb.id]
 
   #   internal        = "${var.internal_alb}"  
@@ -18,7 +18,7 @@ resource "aws_alb" "alb" {
 resource "aws_security_group" "alb" {
   name        = "${local.namespace}-alb"
   description = "Compose Host Security Group"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
   tags        = local.common_tags
 }
 
@@ -110,7 +110,7 @@ resource "aws_alb_target_group" "alb_web" {
   name     = "${local.namespace}-alb-web"
   port     = "80"
   protocol = "HTTP"
-  vpc_id   = module.vpc.vpc_id
+  vpc_id   = var.vpc_id
 
   stickiness {
     type            = "lb_cookie"
@@ -148,7 +148,7 @@ resource "aws_alb_target_group" "alb_streaming" {
   name     = "${local.namespace}-alb-streaming"
   port     = "8880"
   protocol = "HTTP"
-  vpc_id   = module.vpc.vpc_id
+  vpc_id   = var.vpc_id
 
   stickiness {
     type            = "lb_cookie"
