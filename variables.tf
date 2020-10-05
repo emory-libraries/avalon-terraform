@@ -38,7 +38,7 @@ variable "bastion_instance_type" {
 variable "base_policy_arns" {
   type = list(string)
   default = []
-  desciption = "Additional base policy arns that will be attached to every role that the template creates."
+  description = "Additional base policy arns that will be attached to every role that the template creates."
 }
 
 variable "compose_instance_type" {
