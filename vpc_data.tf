@@ -19,3 +19,7 @@ data "aws_subnet" "selected" {
     for_each = data.aws_subnet_ids.selected.ids
     id = each.value
 }
+
+locals {
+    aws_subnet_arns = [for s in data.aws_subnet.selected : s.arn ]
+}
