@@ -90,9 +90,10 @@ resource "aws_iam_role_policy_attachment" "compose_api_access" {
   policy_arn = aws_iam_policy.compose_api_access.arn
 }
 
-resource "aws_iam_role_policy_attachment" "compose_ecr" {
+resource "aws_iam_role_policy_attachment" "compose_ecr_and_base_policies" {
+  for_each   = toset(concat(["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"], var.base_policy_arns))
   role       = aws_iam_role.compose.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  policy_arn = each.value
 }
 
 resource "aws_security_group" "compose" {

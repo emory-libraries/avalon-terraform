@@ -25,9 +25,10 @@ resource "aws_iam_role" "build" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "build_ecr" {
+resource "aws_iam_role_policy_attachment" "build_ecr_base_policies" {
+  for_each   = toset(concat(["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"], var.base_policy_arns ))
   role       = aws_iam_role.build.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
+  policy_arn = each.value
 }
 
 resource "aws_iam_role_policy" "build" {

@@ -39,6 +39,10 @@ module "db_fcrepo" {
       name  = "client_encoding"
       value = "UTF8"
     },
+    {
+      name  = "rds.force_ssl"
+      value = 1
+    }
   ]
 }
 /* 
