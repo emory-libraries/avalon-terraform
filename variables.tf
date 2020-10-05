@@ -159,3 +159,11 @@ variable "subnet_tags" {
   type = list(string)
   default = ["Private Subnet 1", "Private Subnet 2"]
 }
+
+variable "private_key_file" {
+  type = string
+}
+
+variable "certificate_body_file" {
+  type = string
+}
