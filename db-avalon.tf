@@ -38,9 +38,14 @@ module "db_avalon" {
       name  = "client_encoding"
       value = "UTF8"
     },
+    {
+      name  = "rds.force_ssl"
+      value = 1
+    }
   ]
 }
-
+/* 
+SSM is not available in aws@emory
 resource "aws_ssm_parameter" "db_avalon_host" {
   name      = "/${local.namespace}-avalon-db/host"
   value     = module.db_avalon.this_db_instance_address
@@ -68,4 +73,4 @@ resource "aws_ssm_parameter" "db_avalon_admin_password" {
   type      = "SecureString"
   overwrite = true
 }
-
+ */

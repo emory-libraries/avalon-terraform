@@ -41,6 +41,8 @@ module "db_fcrepo" {
     },
   ]
 }
+/* 
+SSM is not available on aws@emory
 
 resource "aws_ssm_parameter" "db_fcrepo_host" {
   name      = "/${local.namespace}-fcrepo-db/host"
@@ -69,4 +71,4 @@ resource "aws_ssm_parameter" "db_fcrepo_admin_password" {
   type      = "SecureString"
   overwrite = true
 }
-
+ */

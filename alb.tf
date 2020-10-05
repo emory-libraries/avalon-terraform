@@ -2,8 +2,7 @@ resource "aws_alb" "alb" {
   name = "${local.namespace}-alb"
   subnets         = data.aws_subnet_ids.selected.ids
   security_groups = [aws_security_group.alb.id]
-
-  #   internal        = "${var.internal_alb}"  
+  internal        = true  
   idle_timeout = "300"
   #   tags {    
   #     Name    = "${var.alb_name}"    
