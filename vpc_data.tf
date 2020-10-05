@@ -11,7 +11,7 @@ data "aws_vpc" "selected" {
 }
 
 resource "random_shuffle" "random_subnet" {
-    value = data.aws_subnet_ids.selected.ids
+    input = data.aws_subnet_ids.selected.ids
     result_count = 1 
 }
 

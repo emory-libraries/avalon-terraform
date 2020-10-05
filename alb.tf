@@ -81,7 +81,7 @@ resource "aws_alb_listener" "alb_listener" {
   load_balancer_arn = aws_alb.alb.arn
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate_validation.web_streaming_cert.certificate_arn
+  certificate_arn   = aws_acm_certificate.web_streaming_cert.arn
 
   default_action {
     target_group_arn = aws_alb_target_group.alb_web.arn
@@ -179,7 +179,7 @@ resource "aws_acm_certificate" "web_streaming_cert" {
 
 resource "aws_lb_listener_certificate" "alb_streaming" {
   listener_arn    = aws_alb_listener.alb_listener.arn
-  certificate_arn = aws_acm_certificate_validation.web_streaming_cert.certificate_arn
+  certificate_arn = aws_acm_certificate.web_streaming_cert.arn
 }
 
 #Instance Attachment

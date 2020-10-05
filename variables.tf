@@ -67,10 +67,6 @@ variable "email_support" {
   type = string
 }
 
-variable "environment" {
-  type = string
-}
-
 variable "fcrepo_binary_bucket_username" {
   type = string
 }
