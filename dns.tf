@@ -1,5 +1,3 @@
-
-
 module "dns" {
   source = "github.com/infrablocks/terraform-aws-dns-zones"
 
@@ -22,4 +20,3 @@ resource "aws_route53_record" "public_zone" {
   records = module.dns.public_zone_name_servers
   ttl     = 300
 }
-
