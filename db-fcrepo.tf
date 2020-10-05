@@ -27,7 +27,7 @@ module "db_fcrepo" {
 
   vpc_security_group_ids = [aws_security_group.db.id]
   subnet_ids = data.aws_subnet_ids.selected.ids
-  availability_zone = aws_subnet.random.availability_zone
+  availability_zone = data.aws_subnet.random.availability_zone
 
   tags = local.common_tags
   family = "postgres10"

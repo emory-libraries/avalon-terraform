@@ -296,7 +296,7 @@ resource "aws_volume_attachment" "compose_solr" {
 }
 
 resource "aws_ebs_volume" "solr_data" {
-  availability_zone = aws_subnet.random.availability_zone
+  availability_zone = data.aws_subnet.random.availability_zone
   size              = 20
 }
 
