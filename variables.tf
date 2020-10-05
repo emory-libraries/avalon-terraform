@@ -15,10 +15,6 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-variable "availability_zone" {
-  default = "us-east-1a"
-}
-
 variable "avalon_admin" {
   default = "admin@example.com"
 }

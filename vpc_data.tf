@@ -15,6 +15,10 @@ resource "random_shuffle" "random_subnet" {
     result_count = 1 
 }
 
+data "aws_subnet" "random" {
+    id  = random_shuffle.random_subnet.result.0
+}
+
 data "aws_subnet" "selected" {
     for_each = data.aws_subnet_ids.selected.ids
     id = each.value
