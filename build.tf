@@ -82,7 +82,7 @@ POLICY
 }
 
 resource "aws_ecr_repository" "avalon" {
-  name                 = "avalon-${var.environment}"
+  name                 = "avalon-${terraform.workspace}"
   image_tag_mutability = "MUTABLE"
 
   tags = local.common_tags

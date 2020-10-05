@@ -137,9 +137,9 @@ variable "vpc_private_subnets" {
 }
 
 locals {
-  namespace         = "${var.stack_name}-${var.environment}"
-  public_zone_name  = "${var.environment}.${var.hosted_zone_name}"
-  private_zone_name = "vpc.${var.environment}.${var.hosted_zone_name}"
+  namespace         = "${var.stack_name}-${terraform.workspace}"
+  public_zone_name  = "${terraform.workspace}.${var.hosted_zone_name}"
+  private_zone_name = "vpc.${terraform.workspace}.${var.hosted_zone_name}"
 
   common_tags = merge(
     var.tags,
@@ -157,5 +157,5 @@ variable "vpc_id" {
 
 variable "subnet_tags" {
   type = list(string)
-  default = ["Private Subnet 1", "Private Subnet 2", "Public Subnet 1"]
+  default = ["Private Subnet 1", "Private Subnet 2"]
 }

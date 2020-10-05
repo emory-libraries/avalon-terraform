@@ -16,8 +16,8 @@ output "ec2_private_keyfile" {
   value = var.ec2_private_keyfile
 }
 
-output "environment" {
-  value = var.environment
+output "workspace" {
+  value = terraform.workspace
 }
 
 output "hosted_zone_name" {

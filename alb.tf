@@ -81,7 +81,7 @@ resource "aws_alb_listener" "alb_listener" {
   load_balancer_arn = aws_alb.alb.arn
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate_validation.web_cert.certificate_arn
+  certificate_arn   = aws_acm_certificate_validation.web_streaming_cert.certificate_arn
 
   default_action {
     target_group_arn = aws_alb_target_group.alb_web.arn
@@ -165,59 +165,21 @@ resource "aws_alb_target_group" "alb_streaming" {
   }
 }
 
-# Create and validate web certificate 
-resource "aws_acm_certificate" "web_cert" {
-  domain_name       = aws_route53_record.alb.fqdn
-  validation_method = "DNS"
+# Import web and streaming certificate 
+resource "aws_acm_certificate" "web_streaming_cert" {
+  private_key = file(var.private_key_file)
+  certificate_body = file(var.certificate_body_file)
 
   tags = local.common_tags
 
   lifecycle {
     create_before_destroy = true
   }
-}
-
-resource "aws_route53_record" "web_cert_validation" {
-  name    = tolist(aws_acm_certificate.web_cert.domain_validation_options)[0].resource_record_name
-  type    = tolist(aws_acm_certificate.web_cert.domain_validation_options)[0].resource_record_type
-  zone_id = module.dns.public_zone_id
-  records = [tolist(aws_acm_certificate.web_cert.domain_validation_options)[0].resource_record_value]
-  ttl     = 60
-}
-
-resource "aws_acm_certificate_validation" "web_cert" {
-  certificate_arn         = aws_acm_certificate.web_cert.arn
-  validation_record_fqdns = [aws_route53_record.web_cert_validation.fqdn]
-}
-
-# Create, validate and attach streaming certificate 
-resource "aws_acm_certificate" "streaming_cert" {
-  domain_name       = aws_route53_record.alb_streaming.fqdn
-  validation_method = "DNS"
-
-  tags = local.common_tags
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_route53_record" "streaming_cert_validation" {
-  name    = tolist(aws_acm_certificate.streaming_cert.domain_validation_options)[0].resource_record_name
-  type    = tolist(aws_acm_certificate.streaming_cert.domain_validation_options)[0].resource_record_type
-  zone_id = module.dns.public_zone_id
-  records = [tolist(aws_acm_certificate.streaming_cert.domain_validation_options)[0].resource_record_value]
-  ttl     = 60
-}
-
-resource "aws_acm_certificate_validation" "streaming_cert" {
-  certificate_arn         = aws_acm_certificate.streaming_cert.arn
-  validation_record_fqdns = [aws_route53_record.streaming_cert_validation.fqdn]
 }
 
 resource "aws_lb_listener_certificate" "alb_streaming" {
   listener_arn    = aws_alb_listener.alb_listener.arn
-  certificate_arn = aws_acm_certificate_validation.streaming_cert.certificate_arn
+  certificate_arn = aws_acm_certificate_validation.web_streaming_cert.certificate_arn
 }
 
 #Instance Attachment
