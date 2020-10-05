@@ -71,7 +71,7 @@ resource "aws_iam_role_policy" "build" {
       ],
       "Condition": {
         "StringEquals": {
-          "ec2:Subnet": ${[for s in data.aws_subnet.selected : s.arn ]}
+          "ec2:Subnet": "${[for s in data.aws_subnet.selected : s.arn ]}"
           "ec2:AuthorizedService": "codebuild.amazonaws.com"
         }
       }
