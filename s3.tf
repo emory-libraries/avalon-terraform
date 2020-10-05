@@ -119,10 +119,3 @@ data "aws_iam_policy_document" "fcrepo_binary_bucket_access" {
     resources = ["${aws_s3_bucket.fcrepo_binary_bucket.arn}/*"]
   }
 }
-
-resource "aws_iam_user_policy" "fcrepo_binary_bucket_policy" {
-  name   = "${local.namespace}-fcrepo-s3-bucket-access"
-  user   = var.fcrepo_binary_bucket_username
-  policy = data.aws_iam_policy_document.fcrepo_binary_bucket_access.json
-}
-
