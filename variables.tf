@@ -99,10 +99,6 @@ variable "stack_name" {
   default = "stack"
 }
 
-variable "stack_bucket" {
-  type = string
-}
-
 variable "stack_key" {
   type    = string
   default = "stack.tfstate"
