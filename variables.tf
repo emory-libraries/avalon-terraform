@@ -161,3 +161,7 @@ variable "private_key_file" {
 variable "certificate_body_file" {
   type = string
 }
+
+variable "certificate_chain_file" {
+  type = string
+}

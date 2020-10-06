@@ -168,7 +168,8 @@ resource "aws_alb_target_group" "alb_streaming" {
 resource "aws_acm_certificate" "web_streaming_cert" {
   private_key = file(var.private_key_file)
   certificate_body = file(var.certificate_body_file)
-
+  certificate_chain = file(var.certificate_chain_file)
+  
   tags = local.common_tags
 
   lifecycle {
