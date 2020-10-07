@@ -109,7 +109,7 @@ resource "aws_security_group_rule" "compose_web" {
   from_port         = "80"
   to_port           = "80"
   protocol          = "tcp"
-  cidr_blocks       = [var.data.aws_vpc.selected.cidr_block]
+  cidr_blocks       = [data.aws_vpc.selected.cidr_block]
 }
 
 resource "aws_security_group_rule" "compose_streaming" {
@@ -118,7 +118,7 @@ resource "aws_security_group_rule" "compose_streaming" {
   from_port         = "8880"
   to_port           = "8880"
   protocol          = "tcp"
-  cidr_blocks       = [var.data.aws_vpc.selected.cidr_block]
+  cidr_blocks       = [data.aws_vpc.selected.cidr_block]
 }
 
 resource "aws_security_group_rule" "compose_ssh" {

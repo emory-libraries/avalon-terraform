@@ -29,7 +29,7 @@ output "tags" {
 }
 
 output "vpc_cidr_block" {
-  value = var.data.aws_vpc.selected.cidr_block
+  value = data.aws_vpc.selected.cidr_block
 }
 
 # Security Groups
