@@ -1,5 +1,9 @@
 # Variable Passthroughs
 
+output "workspace" {
+  value = terraform.workspace
+}
+
 output "aws_region" {
   value = var.aws_region
 }
@@ -10,10 +14,6 @@ output "ec2_keyname" {
 
 output "ec2_private_keyfile" {
   value = var.ec2_private_keyfile
-}
-
-output "workspace" {
-  value = terraform.workspace
 }
 
 output "hosted_zone_name" {
