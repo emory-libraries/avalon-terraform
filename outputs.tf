@@ -4,7 +4,6 @@ output "aws_region" {
   value = var.aws_region
 }
 
-
 output "ec2_keyname" {
   value = var.ec2_keyname
 }
@@ -111,7 +110,6 @@ output "selected_subnets" {
 output "private_zone_id" {
   value = module.dns.private_zone_id
 }
-
 
 output "public_zone_id" {
   value = module.dns.public_zone_id
