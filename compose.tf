@@ -109,7 +109,7 @@ resource "aws_security_group_rule" "compose_web" {
   from_port         = "80"
   to_port           = "80"
   protocol          = "tcp"
-  cidr_blocks       = [var.vpc_cidr_block]
+  cidr_blocks       = [var.data.aws_vpc.selected.cidr_block]
 }
 
 resource "aws_security_group_rule" "compose_streaming" {
@@ -118,11 +118,7 @@ resource "aws_security_group_rule" "compose_streaming" {
   from_port         = "8880"
   to_port           = "8880"
   protocol          = "tcp"
-  cidr_blocks       = [var.vpc_cidr_block]
-}
-
-data "http" "myip" {
-  url = "http://ipv4.icanhazip.com"
+  cidr_blocks       = [var.data.aws_vpc.selected.cidr_block]
 }
 
 resource "aws_security_group_rule" "compose_ssh" {
@@ -131,7 +127,7 @@ resource "aws_security_group_rule" "compose_ssh" {
   from_port         = "22"
   to_port           = "22"
   protocol          = "tcp"
-  cidr_blocks       = ["${chomp(data.http.myip.body)}/32", var.ssh_cidr_block]
+  cidr_blocks       = var.ssh_cidr_blocks
 }
 
 resource "aws_security_group_rule" "compose_egress" {

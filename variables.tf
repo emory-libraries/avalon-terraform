@@ -2,11 +2,6 @@ variable "app_name" {
   default = "avalon"
 }
 
-variable "azs" {
-  type    = list(string)
-  default = ["us-east-1a", "us-east-1b", "us-east-1c"]
-}
-
 variable "aws_profile" {
   default = "default"
 }
@@ -34,7 +29,7 @@ variable "bastion_instance_type" {
 variable "base_policy_arns" {
   type = list(string)
   default = []
-  description = "Additional base policy arns that will be attached to every role that the template creates."
+  description = "Additional base policy arns that will be attached to every role the template creates."
 }
 
 variable "compose_instance_type" {
@@ -112,22 +107,10 @@ variable "tags" {
   default = {}
 }
 
-variable "ssh_cidr_block" {
-  type = string
-}
-
-variable "vpc_cidr_block" {
-  default = "10.1.0.0/16"
-}
-
-variable "vpc_public_subnets" {
-  type    = list(string)
-  default = ["10.1.2.0/24", "10.1.4.0/24", "10.1.6.0/24"]
-}
-
-variable "vpc_private_subnets" {
-  type    = list(string)
-  default = ["10.1.1.0/24", "10.1.3.0/24", "10.1.5.0/24"]
+variable "ssh_cidr_blocks" {
+  type = list(string)
+  default = ["0.0.0.0/0"]
+  description = "List of cidr blocks the compose ec2 will allow SSH access from" 
 }
 
 locals {

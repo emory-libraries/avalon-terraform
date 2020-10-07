@@ -4,9 +4,6 @@ output "aws_region" {
   value = var.aws_region
 }
 
-output "azs" {
-  value = var.azs
-}
 
 output "ec2_keyname" {
   value = var.ec2_keyname
@@ -28,19 +25,12 @@ output "stack_name" {
   value = var.stack_name
 }
 
-output "subnet_config" {
-  value = {
-    public_subnets  = var.vpc_public_subnets
-    private_subnets = var.vpc_private_subnets
-  }
-}
-
 output "tags" {
   value = var.tags
 }
 
 output "vpc_cidr_block" {
-  value = var.vpc_cidr_block
+  value = var.data.aws_vpc.selected.cidr_block
 }
 
 # Security Groups
