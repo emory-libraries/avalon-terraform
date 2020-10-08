@@ -185,7 +185,7 @@ resource "null_resource" "install_docker_on_compose" {
 
   provisioner "file" {
     connection {
-      host        = aws_instance.compose.public_dns
+      host        = aws_instance.compose.private_ip
       user        = "ec2-user"
       agent       = true
       timeout     = "10m"
