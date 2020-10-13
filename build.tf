@@ -155,9 +155,10 @@ phases:
       - echo Pushing the Docker images...
       - docker push $AVALON_DOCKER_REPO:$AVALON_REV 
       - docker push $AVALON_DOCKER_REPO:latest
-      - aws ssm send-command --document-name "AWS-RunShellScript" --document-version "1" --targets '[{"Key":"InstanceIds","Values":["${aws_instance.compose.id}"]}]' --parameters '{"commands":["$(aws ecr get-login --region ${local.region} --no-include-email) && docker-compose pull && docker-compose up -d"],"workingDirectory":["/home/ec2-user/avalon-docker-aws_min"],"executionTimeout":["360"]}' --timeout-seconds 600 --max-concurrency "50" --max-errors "0" --cloud-watch-output-config '{"CloudWatchLogGroupName":"avalon-demo/ssm","CloudWatchOutputEnabled":true}' --region us-east-1
 BUILDSPEC
   }
+  # Removed this line from post build due to SSM failing. Will come up with alternative command.
+  #- aws ssm send-command --document-name "AWS-RunShellScript" --document-version "1" --targets '[{"Key":"InstanceIds","Values":["${aws_instance.compose.id}"]}]' --parameters '{"commands":["$(aws ecr get-login --region ${local.region} --no-include-email) && docker-compose pull && docker-compose up -d"],"workingDirectory":["/home/ec2-user/avalon-docker-aws_min"],"executionTimeout":["360"]}' --timeout-seconds 600 --max-concurrency "50" --max-errors "0" --cloud-watch-output-config '{"CloudWatchLogGroupName":"avalon-${terraform.workspace}/ssm","CloudWatchOutputEnabled":true}' --region us-east-1
 
   vpc_config {
     vpc_id             = var.vpc_id
