@@ -22,6 +22,19 @@ variable "avalon_branch" {
   default = "master"
 }
 
+variable "application_fqdn" {
+  type = string
+  description = "The fully qualified production domain name. Note that the template will also create another domain name for streaming that is streaming.{application_fqdn}"
+}
+variable "application_fqdn_workspace_insertion_index" {
+  type = number
+  default = 0
+  description = <<EOF
+    The application fqdn is split into a list at each '.', this variable is the index (first object is 0) where the workspace will be appended.
+    For example if the application fqdn is 'avr.emory.edu', this variable is set to 0, and the workspace is test, the output will be avr-test.emory.edu.
+    If the workspace is 'prod' then it is not appened to the host name. 
+    EOF
+}
 variable "bastion_instance_type" {
   default = "t2.micro"
 }
