@@ -16,6 +16,10 @@ output "ec2_private_keyfile" {
   value = var.ec2_private_keyfile
 }
 
+output "ec2_private_ip" {
+  value = aws_instance.compose.private_ip
+}
+
 output "hosted_zone_name" {
   value = var.hosted_zone_name
 }
