@@ -13,7 +13,7 @@ module "db_avalon" {
 
   instance_class    = "db.t3.micro"
   allocated_storage = 20
-
+  
   name     = "avalon"
   username = var.db_avalon_username
   password = module.db_avalon_password.result
@@ -43,6 +43,7 @@ module "db_avalon" {
       value = 1
     }
   ]
+  storage_encrypted = true
 }
 /* 
 SSM is not available in aws@emory

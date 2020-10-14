@@ -44,6 +44,7 @@ module "db_fcrepo" {
       value = 1
     }
   ]
+  storage_encrypted = true
 }
 /* 
 SSM is not available on aws@emory
