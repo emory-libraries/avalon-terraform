@@ -8,6 +8,13 @@ resource "aws_s3_bucket" "this_masterfiles" {
     allowed_origins = ["*"]
     allowed_methods = ["GET", "PUT", "POST"]
   }
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket" "this_derivatives" {
@@ -22,6 +29,14 @@ resource "aws_s3_bucket" "this_derivatives" {
     max_age_seconds = "3000"
     allowed_headers = ["Authorization", "Access-Control-Allow-Origin"]
   }
+  
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket" "this_preservation" {
@@ -29,6 +44,14 @@ resource "aws_s3_bucket" "this_preservation" {
   acl           = "private"
   tags          = local.common_tags
   force_destroy = "true"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 data "aws_iam_policy_document" "this_bucket_access" {
@@ -87,6 +110,14 @@ resource "aws_s3_bucket" "fcrepo_binary_bucket" {
   acl           = "private"
   tags          = local.common_tags
   force_destroy = "true"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 data "aws_iam_policy_document" "fcrepo_binary_bucket_access" {
