@@ -100,7 +100,7 @@ resource "aws_lb_listener_rule" "alb_web_listener_rule" {
 
   condition {
     host_header {
-      values = [aws_route53_record.alb.fqdn]
+      values = [aws_route53_record.alb.fqdn, local.appended_fqdn]
     }
   }
 }
@@ -138,7 +138,7 @@ resource "aws_lb_listener_rule" "alb_streaming_listener_rule" {
 
   condition {
       host_header {
-        values = [aws_route53_record.alb_streaming.fqdn]
+        values = [aws_route53_record.alb_streaming.fqdn, local.streaming_appended_fqdn]
     }
   }
 }
