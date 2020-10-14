@@ -48,6 +48,7 @@ resource "aws_iam_instance_profile" "compose" {
 
 resource "aws_iam_role" "compose" {
   name               = "${local.namespace}-compose-role"
+  force_detach_policies = true
   assume_role_policy = data.aws_iam_policy_document.compose.json
 }
 

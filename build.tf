@@ -8,7 +8,7 @@ locals {
 
 resource "aws_iam_role" "build" {
   name = "${local.namespace}-build-role"
-
+  force_detach_policies = true
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",

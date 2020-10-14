@@ -18,6 +18,7 @@ data "aws_iam_policy_document" "transcoder" {
 
 resource "aws_iam_role" "this_pipeline_role" {
   name               = "${local.namespace}-pipeline-role"
+  force_detach_policies = true
   assume_role_policy = data.aws_iam_policy_document.transcoder.json
 }
 
