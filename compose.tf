@@ -211,6 +211,7 @@ ELASTICACHE_HOST=${aws_route53_record.redis.name}
 SECRET_KEY_BASE=${var.secret_key_base}
 AVALON_BRANCH=${var.avalon_branch}
 AWS_REGION=${var.aws_region}
+LTI_API_KEY=${var.lti_api_key}
 RAILS_LOG_TO_STDOUT=true
 SETTINGS__DOMAIN=https://${local.appended_fqdn}
 SETTINGS__DROPBOX__PATH=s3://${aws_s3_bucket.this_masterfiles.id}/dropbox/
