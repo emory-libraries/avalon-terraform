@@ -1,11 +1,11 @@
 # Variable Passthroughs
 
-output "aws_region" {
-  value = var.aws_region
+output "workspace" {
+  value = terraform.workspace
 }
 
-output "azs" {
-  value = var.azs
+output "aws_region" {
+  value = var.aws_region
 }
 
 output "ec2_keyname" {
@@ -16,8 +16,8 @@ output "ec2_private_keyfile" {
   value = var.ec2_private_keyfile
 }
 
-output "environment" {
-  value = var.environment
+output "ec2_private_ip" {
+  value = aws_instance.compose.private_ip
 }
 
 output "hosted_zone_name" {
@@ -28,19 +28,12 @@ output "stack_name" {
   value = var.stack_name
 }
 
-output "subnet_config" {
-  value = {
-    public_subnets  = var.vpc_public_subnets
-    private_subnets = var.vpc_private_subnets
-  }
-}
-
 output "tags" {
   value = var.tags
 }
 
 output "vpc_cidr_block" {
-  value = var.vpc_cidr_block
+  value = data.aws_vpc.selected.cidr_block
 }
 
 # Security Groups
@@ -114,16 +107,12 @@ output "db_fcrepo_password" {
   value = module.db_fcrepo.this_db_instance_password
 }
 
-output "private_subnets" {
-  value = module.vpc.private_subnets
+output "selected_subnets" {
+  value = data.aws_subnet_ids.selected.ids
 }
 
 output "private_zone_id" {
   value = module.dns.private_zone_id
-}
-
-output "public_subnets" {
-  value = module.vpc.public_subnets
 }
 
 output "public_zone_id" {
@@ -134,11 +123,4 @@ output "public_zone_id" {
 #   value = "http://${aws_route53_record.fcrepo.name}/rest"
 # }
 # 
-# output "send_email_policy_arn" {
-#   value = "${aws_iam_policy.send_email.arn}"
-# }
-
-output "vpc_id" {
-  value = module.vpc.vpc_id
-}
 

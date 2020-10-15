@@ -1,5 +1,5 @@
 resource "aws_security_group" "redis" {
-  vpc_id = module.vpc.vpc_id
+  vpc_id = var.vpc_id
 }
 
 resource "aws_security_group_rule" "redis_egress" {
@@ -13,7 +13,7 @@ resource "aws_security_group_rule" "redis_egress" {
 
 resource "aws_elasticache_subnet_group" "redis" {
   name = "${local.namespace}-redis"
-  subnet_ids = module.vpc.private_subnets
+  subnet_ids = data.aws_subnet_ids.selected.ids
 }
 
 resource "aws_elasticache_cluster" "redis" {

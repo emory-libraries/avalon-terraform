@@ -26,8 +26,8 @@ module "db_fcrepo" {
   copy_tags_to_snapshot   = true
 
   vpc_security_group_ids = [aws_security_group.db.id]
-  subnet_ids = module.vpc.private_subnets
-  availability_zone = aws_instance.compose.availability_zone
+  subnet_ids = data.aws_subnet_ids.selected.ids
+  availability_zone = data.aws_subnet.random.availability_zone
 
   tags = local.common_tags
   family = "postgres10"
@@ -39,8 +39,15 @@ module "db_fcrepo" {
       name  = "client_encoding"
       value = "UTF8"
     },
+    {
+      name  = "rds.force_ssl"
+      value = 1
+    }
   ]
+  storage_encrypted = true
 }
+/* 
+SSM is not available on aws@emory
 
 resource "aws_ssm_parameter" "db_fcrepo_host" {
   name      = "/${local.namespace}-fcrepo-db/host"
@@ -69,4 +76,4 @@ resource "aws_ssm_parameter" "db_fcrepo_admin_password" {
   type      = "SecureString"
   overwrite = true
 }
-
+ */

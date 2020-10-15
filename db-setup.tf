@@ -1,14 +1,14 @@
 resource "aws_security_group" "db_client" {
   name        = "${local.namespace}-db-client"
   description = "RDS Client Security Group"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
   tags        = local.common_tags
 }
 
 resource "aws_security_group" "db" {
   name        = "${local.namespace}-db"
   description = "RDS Security Group"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
   tags        = local.common_tags
 }
 

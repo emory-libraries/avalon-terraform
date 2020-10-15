@@ -3,7 +3,7 @@ data "aws_ami" "amzn" {
 
   filter {
     name   = "name"
-    values = ["amzn-ami-hvm-*"]
+    values = ["amzn2-ami-hvm-*"]
   }
 
   filter {
@@ -48,6 +48,7 @@ resource "aws_iam_instance_profile" "compose" {
 
 resource "aws_iam_role" "compose" {
   name               = "${local.namespace}-compose-role"
+  force_detach_policies = true
   assume_role_policy = data.aws_iam_policy_document.compose.json
 }
 
@@ -67,8 +68,6 @@ data "aws_iam_policy_document" "compose_api_access" {
       "elastictranscoder:ReadJob",
       "elastictranscoder:CancelJob",
       "s3:*",
-      "ses:SendEmail",
-      "ses:SendRawEmail",
       "cloudwatch:PutMetricData",
       "ssm:Get*",
       "logs:CreateLogGroup",
@@ -92,15 +91,16 @@ resource "aws_iam_role_policy_attachment" "compose_api_access" {
   policy_arn = aws_iam_policy.compose_api_access.arn
 }
 
-resource "aws_iam_role_policy_attachment" "compose_ecr" {
+resource "aws_iam_role_policy_attachment" "compose_ecr_and_base_policies" {
+  for_each   = toset(concat(["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"], var.base_policy_arns))
   role       = aws_iam_role.compose.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  policy_arn = each.value
 }
 
 resource "aws_security_group" "compose" {
   name        = "${local.namespace}-compose"
   description = "Compose Host Security Group"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
   tags        = local.common_tags
 }
 
@@ -110,7 +110,7 @@ resource "aws_security_group_rule" "compose_web" {
   from_port         = "80"
   to_port           = "80"
   protocol          = "tcp"
-  cidr_blocks       = [var.vpc_cidr_block]
+  cidr_blocks       = [data.aws_vpc.selected.cidr_block]
 }
 
 resource "aws_security_group_rule" "compose_streaming" {
@@ -119,11 +119,7 @@ resource "aws_security_group_rule" "compose_streaming" {
   from_port         = "8880"
   to_port           = "8880"
   protocol          = "tcp"
-  cidr_blocks       = [var.vpc_cidr_block]
-}
-
-data "http" "myip" {
-  url = "http://ipv4.icanhazip.com"
+  cidr_blocks       = [data.aws_vpc.selected.cidr_block]
 }
 
 resource "aws_security_group_rule" "compose_ssh" {
@@ -132,7 +128,7 @@ resource "aws_security_group_rule" "compose_ssh" {
   from_port         = "22"
   to_port           = "22"
   protocol          = "tcp"
-  cidr_blocks       = ["${chomp(data.http.myip.body)}/32", var.ssh_cidr_block]
+  cidr_blocks       = var.ssh_cidr_blocks
 }
 
 resource "aws_security_group_rule" "compose_egress" {
@@ -154,11 +150,10 @@ resource "aws_security_group_rule" "allow_this_redis_access" {
 }
 
 resource "aws_instance" "compose" {
-  ami                         = "ami-08b255f35f032a5ea"
+  ami                         = data.aws_ami.amzn.id
   instance_type               = var.compose_instance_type
   key_name                    = var.ec2_keyname
-  subnet_id                   = module.vpc.public_subnets[0]
-  associate_public_ip_address = true
+  subnet_id                   = random_shuffle.random_subnet.result.0
   iam_instance_profile        = aws_iam_instance_profile.compose.name
   tags = merge(
     local.common_tags,
@@ -191,7 +186,7 @@ resource "null_resource" "install_docker_on_compose" {
 
   provisioner "file" {
     connection {
-      host        = aws_instance.compose.public_dns
+      host        = aws_instance.compose.private_ip
       user        = "ec2-user"
       agent       = true
       timeout     = "10m"
@@ -231,6 +226,7 @@ SETTINGS__EMAIL__SUPPORT=${var.email_support}
 STREAMING_HOST=${aws_route53_record.alb_streaming.fqdn}
 SETTINGS__STREAMING__HTTP_BASE=https://${aws_route53_record.alb_streaming.fqdn}/avalon
 SETTINGS__TIMELINER__TIMELINER_URL=https://${aws_route53_record.alb.fqdn}/timeliner
+SETTINGS__INITIAL_USER=${var.avalon_admin}
 EOF
 
     destination = "/tmp/.env"
@@ -238,7 +234,7 @@ EOF
 
   provisioner "remote-exec" {
     connection {
-      host        = aws_instance.compose.public_dns
+      host        = aws_instance.compose.private_ip
       user        = "ec2-user"
       agent       = true
       timeout     = "10m"
@@ -249,10 +245,16 @@ EOF
       "echo '${aws_efs_file_system.solr_backups.id}:/ /srv/solr_backups efs defaults,_netdev 0 0' | sudo tee -a /etc/fstab",
       "sudo mkdir -p /srv/solr_backups && sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.solr_backups.dns_name}:/ /srv/solr_backups",
       "sudo chown 8983:8983 /srv/solr_backups",
-      "sudo service docker restart",
+      "sudo yum install -y docker && sudo usermod -a -G docker ec2-user && sudo systemctl enable --now docker",
+      "sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose",
+      "sudo chmod +x /usr/local/bin/docker-compose",
       "wget https://github.com/avalonmediasystem/avalon-docker/archive/aws_min.zip && unzip aws_min.zip",
-      "cd avalon-docker-aws_min && cp /tmp/.env . && docker-compose pull && docker-compose up -d",
+      "cd avalon-docker-aws_min && cp /tmp/.env .",
     ]
+  }
+
+  provisioner "local-exec" {
+    command = "aws codebuild start-build --project-name ${aws_codebuild_project.docker.name} --profile ${var.aws_profile} --region ${var.aws_region}"
   }
 }
 
@@ -271,7 +273,7 @@ resource "aws_s3_bucket_policy" "compose-s3" {
       "Action": "s3:GetObject",
       "Resource": "arn:aws:s3:::${aws_s3_bucket.this_derivatives.id}/*",
       "Condition": {
-         "IpAddress": {"aws:SourceIp": "${aws_instance.compose.public_ip}"}
+         "IpAddress": {"aws:SourceIp": "${aws_instance.compose.private_ip}"}
       }
     }
   ]
@@ -291,7 +293,7 @@ resource "aws_volume_attachment" "compose_solr" {
 }
 
 resource "aws_ebs_volume" "solr_data" {
-  availability_zone = var.availability_zone
+  availability_zone = data.aws_subnet.random.availability_zone
   size              = 20
 }
 
