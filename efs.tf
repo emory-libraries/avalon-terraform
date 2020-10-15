@@ -14,14 +14,14 @@ resource "aws_efs_file_system" "solr_backups" {
 resource "aws_efs_mount_target" "solr_backups_mount" {
   #   count           = "${length(var.subnets)}"
   file_system_id  = aws_efs_file_system.solr_backups.id
-  subnet_id       = module.vpc.public_subnets[0]
+  subnet_id       = random_shuffle.random_subnet.result.0
   security_groups = [aws_security_group.efs_sgroup.id]
 }
 
 resource "aws_security_group" "efs_sgroup" {
   name        = "${local.namespace}-efs_sgroup"
   description = "Allow NFS traffic."
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
   tags        = local.common_tags
 
   lifecycle {
@@ -32,7 +32,7 @@ resource "aws_security_group" "efs_sgroup" {
     from_port = "2049"
     to_port   = "2049"
     protocol  = "tcp"
-    cidr_blocks = [module.vpc.vpc_cidr_block]
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
   }
 
   egress {

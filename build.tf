@@ -8,7 +8,7 @@ locals {
 
 resource "aws_iam_role" "build" {
   name = "${local.namespace}-build-role"
-
+  force_detach_policies = true
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -25,9 +25,10 @@ resource "aws_iam_role" "build" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "build_ecr" {
+resource "aws_iam_role_policy_attachment" "build_ecr_base_policies" {
+  for_each   = toset(concat(["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"], var.base_policy_arns ))
   role       = aws_iam_role.build.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
+  policy_arn = each.value
 }
 
 resource "aws_iam_role_policy" "build" {
@@ -71,11 +72,7 @@ resource "aws_iam_role_policy" "build" {
       ],
       "Condition": {
         "StringEquals": {
-          "ec2:Subnet": [
-            "${module.vpc.private_subnet_arns[0]}",
-            "${module.vpc.private_subnet_arns[1]}",
-            "${module.vpc.private_subnet_arns[2]}"
-          ],
+          "ec2:Subnet": ${jsonencode(local.aws_subnet_arns)},
           "ec2:AuthorizedService": "codebuild.amazonaws.com"
         }
       }
@@ -86,7 +83,7 @@ POLICY
 }
 
 resource "aws_ecr_repository" "avalon" {
-  name                 = "avalon"
+  name                 = "avalon-${terraform.workspace}"
   image_tag_mutability = "MUTABLE"
 
   tags = local.common_tags
@@ -158,13 +155,14 @@ phases:
       - echo Pushing the Docker images...
       - docker push $AVALON_DOCKER_REPO:$AVALON_REV 
       - docker push $AVALON_DOCKER_REPO:latest
-      - aws ssm send-command --document-name "AWS-RunShellScript" --document-version "1" --targets '[{"Key":"InstanceIds","Values":["${aws_instance.compose.id}"]}]' --parameters '{"commands":["$(aws ecr get-login --region ${local.region} --no-include-email) && docker-compose pull avalon && docker-compose up -d avalon worker"],"workingDirectory":["/home/ec2-user/avalon-docker-aws_min"],"executionTimeout":["360"]}' --timeout-seconds 600 --max-concurrency "50" --max-errors "0" --cloud-watch-output-config '{"CloudWatchLogGroupName":"avalon-demo/ssm","CloudWatchOutputEnabled":true}' --region us-east-1
 BUILDSPEC
   }
+  # Removed this line from post build due to SSM failing. Will come up with alternative command.
+  #- aws ssm send-command --document-name "AWS-RunShellScript" --document-version "1" --targets '[{"Key":"InstanceIds","Values":["${aws_instance.compose.id}"]}]' --parameters '{"commands":["$(aws ecr get-login --region ${local.region} --no-include-email) && docker-compose pull && docker-compose up -d"],"workingDirectory":["/home/ec2-user/avalon-docker-aws_min"],"executionTimeout":["360"]}' --timeout-seconds 600 --max-concurrency "50" --max-errors "0" --cloud-watch-output-config '{"CloudWatchLogGroupName":"avalon-${terraform.workspace}/ssm","CloudWatchOutputEnabled":true}' --region us-east-1
 
   vpc_config {
-    vpc_id             = module.vpc.vpc_id
-    subnets            = module.vpc.private_subnets
+    vpc_id             = var.vpc_id
+    subnets            = data.aws_subnet_ids.selected.ids
     security_group_ids = [aws_security_group.compose.id]
   }
 

@@ -18,6 +18,7 @@ data "aws_iam_policy_document" "transcoder" {
 
 resource "aws_iam_role" "this_pipeline_role" {
   name               = "${local.namespace}-pipeline-role"
+  force_detach_policies = true
   assume_role_policy = data.aws_iam_policy_document.transcoder.json
 }
 
@@ -71,6 +72,11 @@ resource "aws_iam_role_policy_attachment" "this_pipeline" {
   policy_arn = aws_iam_policy.this_pipeline_policy.arn
 }
 
+resource "aws_iam_role_policy_attachment" "this_pipeline_base_policies" {
+  for_each   = toset(var.base_policy_arns)
+  role       = aws_iam_role.this_pipeline_role.name
+  policy_arn = each.value
+}
 resource "aws_elastictranscoder_pipeline" "this_pipeline" {
   name          = "${local.namespace}-${var.app_name}-transcoding-pipeline"
   input_bucket  = aws_s3_bucket.this_masterfiles.id
