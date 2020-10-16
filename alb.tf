@@ -84,12 +84,12 @@ resource "aws_alb_listener" "alb_listener" {
 
   default_action {
     type             = "fixed-response"
-  }
   
-  fixed_response {
-    content_type = "text/plain"
-    message_body = "Emory University Libraries"
-    status_code  = "200"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Emory University Libraries"
+      status_code  = "200"
+    }
   }
 }
 
