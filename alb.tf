@@ -83,8 +83,13 @@ resource "aws_alb_listener" "alb_listener" {
   certificate_arn   = aws_acm_certificate.web_streaming_cert.arn
 
   default_action {
-    target_group_arn = aws_alb_target_group.alb_web.arn
-    type             = "forward"
+    type             = "fixed-response"
+  }
+  
+  fixed_response {
+    content_type = "text/plain"
+    message_body = "Emory University Libraries"
+    status_code  = "200"
   }
 }
 

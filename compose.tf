@@ -233,9 +233,9 @@ ASSERTION_LOGOUT_URL=${var.assertion_logout_url}
 IDP_SLO_TARGET_URL=${var.idp_slo_target_url}
 ISSUER=${var.issuer}
 IDP_SSO_TARGET_URL=${var.idp_sso_target_url}
-IDP_CERT=${var.idp_cert_file}
-SP_CERT=${var.sp_cert_file}
-SP_KEY=${var.sp_key_file}
+IDP_CERT=${file(var.idp_cert_file)}
+SP_CERT=${file(var.sp_cert_file)}
+SP_KEY=${file(var.sp_key_file)}
 ################################################
 EOF
 
