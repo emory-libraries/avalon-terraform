@@ -8,6 +8,10 @@ output "aws_region" {
   value = var.aws_region
 }
 
+output "alb_dns_name" {
+  value = aws_alb.alb.dns_name
+}
+
 output "ec2_keyname" {
   value = var.ec2_keyname
 }
