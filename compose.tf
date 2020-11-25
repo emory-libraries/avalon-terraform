@@ -201,7 +201,6 @@ SOLR_LOGGROUP=${aws_cloudwatch_log_group.compose_log_group.name}/solr.log
 
 HLS_LOGGROUP=${aws_cloudwatch_log_group.compose_log_group.name}/hls.log
 AVALON_STREAMING_BUCKET=${aws_s3_bucket.this_derivatives.id}
-
 AVALON_LOGGROUP=${aws_cloudwatch_log_group.compose_log_group.name}/avalon.log
 WORKER_LOGGROUP=${aws_cloudwatch_log_group.compose_log_group.name}/worker.log
 AVALON_DOCKER_REPO=${aws_ecr_repository.avalon.repository_url}
@@ -211,7 +210,6 @@ ELASTICACHE_HOST=${aws_route53_record.redis.name}
 SECRET_KEY_BASE=${var.secret_key_base}
 AVALON_BRANCH=${var.avalon_branch}
 AWS_REGION=${var.aws_region}
-LTI_API_KEY=${var.lti_api_key}
 RAILS_LOG_TO_STDOUT=true
 SETTINGS__DOMAIN=https://${local.appended_fqdn}
 SETTINGS__DROPBOX__PATH=s3://${aws_s3_bucket.this_masterfiles.id}/dropbox/
@@ -227,15 +225,20 @@ STREAMING_HOST=${local.streaming_appended_fqdn}
 SETTINGS__STREAMING__HTTP_BASE=https://${local.streaming_appended_fqdn}/avalon
 SETTINGS__TIMELINER__TIMELINER_URL=https://${local.appended_fqdn}/timeliner
 SETTINGS__INITIAL_USER=${var.avalon_admin}
+##### LTI Integration Variables ################
+LTI_AUTH_KEY=${var.lti_auth_key}
+LTI_AUTH_SECRET=${var.lti_auth_secret}
+################################################
 ##### Shibboleth Environment Variables #########
+ADMIN_LDAP_GROUPS="${join(",", var.admin_ldap_groups)}"
 ASSERTION_CS_URL=${var.assertion_cs_url}
 ASSERTION_LOGOUT_URL=${var.assertion_logout_url}
 IDP_SLO_TARGET_URL=${var.idp_slo_target_url}
 ISSUER=${var.issuer}
 IDP_SSO_TARGET_URL=${var.idp_sso_target_url}
-IDP_CERT=${file(var.idp_cert_file)}
-SP_CERT=${file(var.sp_cert_file)}
-SP_KEY=${file(var.sp_key_file)}
+IDP_CERT="${replace(file(var.idp_cert_file), "\n", "\\n")}"
+SP_CERT="${replace(file(var.sp_cert_file), "\n", "\\n")}"
+SP_KEY="${replace(file(var.sp_key_file), "\n", "\\n")}"
 ################################################
 EOF
 
