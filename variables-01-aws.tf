@@ -19,7 +19,7 @@ variable "avalon_repo" {
 }
 
 variable "avalon_branch" {
-  default = "master"
+  default = "main"
 }
 
 variable "application_fqdn" {
