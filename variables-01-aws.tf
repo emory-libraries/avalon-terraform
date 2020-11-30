@@ -52,6 +52,11 @@ variable "compose_instance_type" {
   default = "t3.large"
 }
 
+variable "compose_volume_size" {
+  type = number
+  default = 150
+}
+
 variable "db_avalon_username" {
   default = "dbavalon"
 }
