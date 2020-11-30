@@ -48,6 +48,11 @@ variable "base_policy_arns" {
   description = "Additional base policy arns that will be attached to every role the template creates."
 }
 
+variable "compose_docker_branch" {
+  default = "aws_min"
+  description = "Controls which branch of avalon-docker the compose ec2 will download and unzip during setup"
+}
+
 variable "compose_instance_type" {
   default = "t3.large"
 }

@@ -11,11 +11,6 @@ variable "assertion_logout_url" {
   default = ""
 }
 
-variable "compose_docker_branch" {
-  default = "aws_min"
-  description = "Controls which branch of avalon-docker the compose ec2 will download and unzip during setup"
-}
-
 variable "fedora_ssl" {
   type = bool
   default = false
