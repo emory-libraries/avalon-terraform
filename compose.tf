@@ -261,8 +261,8 @@ EOF
       "sudo yum install -y docker && sudo usermod -a -G docker ec2-user && sudo systemctl enable --now docker",
       "sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose",
       "sudo chmod +x /usr/local/bin/docker-compose",
-      "wget https://github.com/avalonmediasystem/avalon-docker/archive/aws_min.zip && unzip aws_min.zip",
-      "cd avalon-docker-aws_min && cp /tmp/.env .",
+      "wget https://github.com/avalonmediasystem/avalon-docker/archive/${var.compose_docker_branch}.zip && unzip ${var.compose_docker_branch}.zip",
+      "cd avalon-docker-${var.compose_docker_branch} && cp /tmp/.env .",
     ]
   }
 
