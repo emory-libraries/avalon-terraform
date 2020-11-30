@@ -11,6 +11,12 @@ variable "assertion_logout_url" {
   default = ""
 }
 
+variable "fedora_ssl" {
+  type = bool
+  default = false
+  description = "Forces the fedora database connection to use ssl."
+}
+
 variable "idp_slo_target_url" {
   default = ""
 }
