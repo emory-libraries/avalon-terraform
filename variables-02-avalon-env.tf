@@ -11,6 +11,11 @@ variable "assertion_logout_url" {
   default = ""
 }
 
+variable "csp_frame_ancestors" {
+  default = ""
+  description = "Sets allowed urls for the Content Security Policy header"
+}
+
 variable "fedora_ssl" {
   type = bool
   default = false
