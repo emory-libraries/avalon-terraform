@@ -16,10 +16,12 @@ variable "avalon_admin" {
 
 variable "avalon_repo" {
   default = "https://github.com/emory-libraries/avalon"
+  description = "Determines what github repo AWS CodeBuild builds from"
 }
 
 variable "avalon_branch" {
   default = "main"
+  description = "Controls which github branch of the avalon repo is used by AWS CodeBuild"
 }
 
 variable "application_fqdn" {
@@ -55,11 +57,13 @@ variable "compose_docker_branch" {
 
 variable "compose_instance_type" {
   default = "t3.large"
+  description = "The instance size of the ec2 that runs the avalon docker containers"
 }
 
 variable "compose_volume_size" {
   type = number
   default = 150
+  description = "The root volume size of the ec2 that runs the avalon docker containers"
 }
 
 variable "db_avalon_username" {
@@ -72,10 +76,12 @@ variable "db_fcrepo_username" {
 
 variable "ec2_keyname" {
   type = string
+  description = "The name of the key in AWS that the ec2 will use for SSH login"
 }
 
 variable "ec2_private_keyfile" {
   type = string
+  description = "Path to the ec2 private key file, this will allow you to SSH inside the EC2 and run commands The key should have '0600' file permission."
 }
 
 variable "email_comments" {
@@ -118,16 +124,6 @@ variable "stack_name" {
   default = "stack"
 }
 
-variable "stack_key" {
-  type    = string
-  default = "stack.tfstate"
-}
-
-variable "stack_region" {
-  type    = string
-  default = "us-east-1"
-}
-
 variable "tags" {
   type    = map(string)
   default = {}
@@ -136,7 +132,7 @@ variable "tags" {
 variable "ssh_cidr_blocks" {
   type = list(string)
   default = ["0.0.0.0/0"]
-  description = "List of cidr blocks the compose ec2 will allow SSH access from" 
+  description = "List of cidr blocks the compose ec2 will allow SSH access from, defaults to the entire internet" 
 }
 
 locals {
@@ -155,21 +151,26 @@ locals {
 }
 
 variable "vpc_id" {
-  type = string 
+  type = string
+  description = "VPC that will be used by terraform, this VPC is called via data only, terraform will not attempt to manaage the existance of the VPC"
 }
 
 variable "subnet_tags" {
   type = list(string)
+  description = "List of Subnet Name tags, these subnets should exist in the provided VPC and there need to be a minimum of two in different availablity zones."
 }
 
 variable "private_key_file" {
   type = string
+  description = "Path to a the PEM-formatted private key for the avalon website. This will be loaded into AWS Certificate Manager(ACM) and used by the Application Load Balancer(ALB). Max supported RSA Key size is 2048"
 }
 
 variable "certificate_body_file" {
   type = string
+  description = "Path the PEM-formatted signed certificate for the avalon website, this will be loaded into ACM and used by the ALB."
 }
 
 variable "certificate_chain_file" {
   type = string
+  description = "Path to the PEM-formatted interm or chain certificate, some regions may require the chain cert be in 'reverse' format."
 }

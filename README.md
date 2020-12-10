@@ -1,47 +1,53 @@
-Turnkey solution for Avalon on AWS, using Terraform
+# Emory Libraries adaption of Avalon-Terraform
 
 # Goals
 
-The goal of this solution is to provide a simple, cost-effective way to put Avalon on the cloud, while remaining resilient, performant and easy to manage. It aims to serve collections with low to medium traffic.
+The goal of this fork is to deploy Avalon in a restricted aws@emory account. The original version of this presumes full access to a standard AWS account. AWS@emory accounts are restricted and many services are not allowed or only partially available.
 
 # Architecture diagram
 ![](diagram.jpg)
 
 # Getting started
+
 ## Prerequisites
 
 1. Download and install [Terraform 0.12+](https://www.terraform.io/downloads.html). The scripts have been upgraded to HCL 2 and therefore incompatible with earlier versions of Terraform.
-1. Clone this repo
+1. Clone this repo or use the git-subtree method. Note that you must remove the .gitignore of *.tfvars in order to save variable files to github, it's recommend to use a private repo and git-crypt to manage secrets.
 1. Create or import an [EC2 key-pair](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) for your region.
-1. Create an S3 bucket to hold the terraform state, this is useful when
-    executing terraform on multiple machines (or working as a team) because it allows state to remain in sync. 
-1. Copy `dev.tfbackend.example` to `dev.tfbackend` and fill in the previously created bucket name.
+2. Create a VPC and designate subnets to be used with this project. These subnets must be given Name tags.
+3. Create an IAM user that Fedora will use to sign its S3 requests.
+4. Create an S3 bucket to hold the terraform state, this is useful when
+    executing terraform on multiple machines (or working as a team) because it allows state to remain in sync.
+    This will also require the creation of a dynamodb table to manage the statefile lock.
+5. Fill out provider and state information in [main.tf](main.tf)
+    
+    ```hcl
+    provider "aws" {
+      region = "us-east-1"
+      profile = "aws-profile-name-here"
+    }
 
-    ```
-    bucket = "my-terraform-state"
-    key    = "state.tfstate"
-    region = "us-east-1"
-    ````
-1. Create an IAM user that Fedora will use to sign its S3 requests.
-1. Create a [public hosted zone in Route53](http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/CreatingHostedZone.html); Terraform will automatically manage DNS entries in this zone. A registered domain name is needed to pair with the Route53 hosted zone. You can [use Route53 to register a new domain](http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-register.html) or [use Route53 to manage an existing domain](http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/MigratingDNS.html).
-1. Copy `terraform.tfvars.example` to `terraform.tfvars` and fill in the relevant information:
-    ```
-    hosted_zone_name    = "mydomain.org"
-    ec2_keyname         = "my-ec2-key"
-    ec2_private_keyfile = "/local/path/my-ec2-key.pem"
-    stack_name          = "mystack"
-    sms_notification    = "+18125550123"
-    fcrepo_binary_bucket_username   = "iam_user"
-    fcrepo_binary_bucket_access_key = "***********"
-    fcrepo_binary_bucket_secret_key = "***********"
-    tags {
-      Creator    = "me"
-      AnotherTag = "Whatever value I want!"
+    terraform {
+      backend "s3" {
+      bucket = "created-bucket-here"
+      region = "us-east-1"
+      key    = "terraform.tfstate"
+      profile = "aws-profile-name-here"
+      encrypt = true
+      dynamodb_table = "dynamo-db-table-here"
+      }
     }
     ```
-    * Note: You can have more than one variable file and pass the name on the command line to manage more than one stack.
-    * Note2: The terraform workspace is considered the environment
-2. Execute `terraform init  -reconfigure -backend-config=dev.tfbackend`.
+
+6. Execute `terraform init`, to initialize the backend.
+7. Create a new workspace, it is not recommended to use the default workspace, for example `terraform workspace new prod` will create a prod workspace.
+   If multiple workspaces/environments are desired, create a .tfvars file for each workspace, for example prod.tfvars. Use this file with the --vars-file flag
+8. Fill out relevant variables, check the variables section to see which are required.
+
+## Variables
+
+### There are 
+
 
 ## Bringing up the stack
 
