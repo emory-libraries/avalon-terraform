@@ -63,23 +63,13 @@ To actually make those changes:
     terraform apply --var-file=[workspace].tfvars
 
 
-## Extra settings
-
-### Email
-
-In order for Avalon to send mails using AWS, you need to add these variables to the `terraform.tfvars` file and make sure these email addresses are [verified in Simple Email Service](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html):
-
-    email_comments      = "comments@mydomain.org"
-    email_notification  = "notification@mydomain.org"
-    email_support       = "support@mydomain.org"
-
 ### Authentication
 
 Turnkey comes bundled with [Persona](https://github.com/samvera-labs/samvera-persona) by default but can be configured to work with other authentication strategies by using the appropriate omniauth gems. Refer to [this doc](https://wiki.dlib.indiana.edu/display/VarVideo/Manual+Installation+Instructions#ManualInstallationInstructions-AuthenticationStrategy) for integration instruction.
 
-Emory Avalon is integrated with Omniauth SAML, many of the Avalon Application variables related to this integration.
+Emory Avalon is integrated with Omniauth SAML and Omniauth LTI, many of the Avalon Application variables related to these integrations.
 
-# Maintenance
+## Maintenance
 
 ## Update the stack
 
@@ -108,7 +98,7 @@ Cost can be further reduced by using [reserved instances](https://aws.amazon.com
 
 Out of the box, the system can service up to 100 concurrent streaming users without serious performance degradation. More performance can be achieved by scaling up using a larger EC2 instance.
 
-# Upstream Changes
+## Upstream Changes
 
 Since this repository is a fork, work may happen in the upstream repository that we want to incorporate here.
 In order to do this, the `master` branch of this repository will track the `master` branch from avalonmediasystem, which can be set up as follows:
