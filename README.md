@@ -50,6 +50,7 @@ The goal of this fork is to deploy Avalon in a restricted aws@emory account. The
 ### Variables are separated into two catagories: AWS Variables and Avalon Application Variables
 
 The AWS variables are found in this [table](readme/aws_var.md)
+
 The Avalon Application variables are listed [here](readme/avalon_variables.md)
 
 ## Bringing up the stack
