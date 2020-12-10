@@ -94,7 +94,7 @@ Since Avalon, Fedora, Solr and Nginx are running inside Docker containers manage
 
 The EC2 instances are sized to minimize cost and allow occasional bursts (mostly by using `t3`). However if your system is constantly utilizing 30%+ CPU, it might be cheaper & more performant to switch to larger `t3` or `m5` instances.
 
-Cost can be further reduced by using [reserved instances](https://aws.amazon.com/ec2/pricing/reserved-instances/pricing/) - commiting to buy EC2 for months or years.
+Cost can be further reduced by using [reserved instances](https://aws.amazon.com/ec2/pricing/reserved-instances/pricing/) - committing to buy EC2 for months or years.
 
 Out of the box, the system can service up to 100 concurrent streaming users without serious performance degradation. More performance can be achieved by scaling up using a larger EC2 instance.
 
@@ -114,4 +114,4 @@ Now when changes are made in avalonmediasystem/avalon-terraform's `master`, we c
 2. Pull in changes from avalonmediasystem: `git pull`
 3. Push changes to GitHub (assuming your GitHub remote is called "origin", as it is by default): `git push origin`
 
-It is important that the `master` branch only recieves updates from upstream, so that it can continue to fast-forward those changes in our repository.
+It is important that the `master` branch only receives updates from upstream, so that it can continue to fast-forward those changes in our repository.
