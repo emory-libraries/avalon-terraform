@@ -1,17 +1,3 @@
-## Requirements
-
-| Name | Version |
-|------|---------|
-| terraform | >= 0.13 |
-
-## Providers
-
-| Name | Version |
-|------|---------|
-| aws | n/a |
-| null | n/a |
-| random | n/a |
-
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -30,32 +16,3 @@
 | secret\_key\_base | n/a | `string` | `"a882b3f2f6144681b2fc0eb23fbdc8904c806fae882a3b6ada84ae83a4d967a9200e1ea27ee6c3049b1ca8bae040d844f04457d0f58c125813d3978a36898675"` | no |
 | sp\_cert\_file | Path to the service provider's cert, in standard PEM format. | `string` | `""` | no |
 | sp\_key\_file | Path to the service provider's private key, in standard PEM format. | `string` | `""` | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| alb\_dns\_name | n/a |
-| aws\_region | n/a |
-| cache\_address | n/a |
-| cache\_port | n/a |
-| db\_avalon\_address | n/a |
-| db\_avalon\_password | n/a |
-| db\_avalon\_port | n/a |
-| db\_avalon\_username | n/a |
-| db\_fcrepo\_address | n/a |
-| db\_fcrepo\_password | n/a |
-| db\_fcrepo\_port | n/a |
-| db\_fcrepo\_username | n/a |
-| ec2\_keyname | n/a |
-| ec2\_private\_ip | n/a |
-| ec2\_private\_keyfile | n/a |
-| hosted\_zone\_name | n/a |
-| private\_zone\_id | n/a |
-| public\_zone\_id | n/a |
-| selected\_subnets | n/a |
-| stack\_name | n/a |
-| tags | n/a |
-| vpc\_cidr\_block | n/a |
-| workspace | n/a |
-
