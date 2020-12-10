@@ -40,7 +40,8 @@ variable "issuer" {
 }
 
 variable "idp_cert_file" {
-  default = "Path to IDP's cert, cert should be in PEM format."
+  default = ""
+  description = "Path to IDP's cert, cert should be in PEM format."
 }
 
 variable "lti_auth_key" {
