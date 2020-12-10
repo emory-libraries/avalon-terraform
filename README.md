@@ -56,11 +56,11 @@ The Avalon Application variables are listed [here](readme/avalon_variables.md)
 
 To see the changes Terraform will make:
 
-    terraform plan --var-file=prod.tfvars
+    terraform plan --var-file=[workspace].tfvars
 
 To actually make those changes:
 
-    terraform apply --var-file=prod.tfvars
+    terraform apply --var-file=[workspace].tfvars
 
 
 ## Extra settings
@@ -77,25 +77,31 @@ In order for Avalon to send mails using AWS, you need to add these variables to 
 
 Turnkey comes bundled with [Persona](https://github.com/samvera-labs/samvera-persona) by default but can be configured to work with other authentication strategies by using the appropriate omniauth gems. Refer to [this doc](https://wiki.dlib.indiana.edu/display/VarVideo/Manual+Installation+Instructions#ManualInstallationInstructions-AuthenticationStrategy) for integration instruction.
 
+Emory Avalon is integrated with Omniauth SAML, many of the Avalon Application variables related to this integration.
+
 # Maintenance
 
 ## Update the stack
-You can proceed with `terraform plan` and `terraform apply` as often as you want to see and apply changes to the
+
+You can proceed with `terraform plan --var-file=[workspace].tfvars` and `terraform apply --var-file=[workspace].tfvars` as often as you want to see and apply changes to the
 stack. Changes you make to the `*.tf` files  will automatically be reflected in the resources under Terraform's
 control.
 
 ## Destroy the stack
+
 Special care must be taken if you want to retain all data when destroying the stack. If that wasn't a concern, you can simply run
     
-    terraform destroy
+    terraform destroy --var-file=[workspace].tfvars
 
 ## Update the containers
+
 Since Avalon, Fedora, Solr and Nginx are running inside Docker containers managed by docker-compose, you can SSH to the EC2 box and run docker-compose commands as usual.
 
     docker-compose pull
     docker-compose up -d
 
 ## Performance & Cost
+
 The EC2 instances are sized to minimize cost and allow occasional bursts (mostly by using `t3`). However if your system is constantly utilizing 30%+ CPU, it might be cheaper & more performant to switch to larger `t2` or `m5` instances.
 
 Cost can be further reduced by using [reserved instances](https://aws.amazon.com/ec2/pricing/reserved-instances/pricing/) - commiting to buy EC2 for months or years.
