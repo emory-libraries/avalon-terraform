@@ -1,13 +1,14 @@
 # Emory Libraries adaption of Avalon-Terraform
 
-# Goals
+## Goals
 
 The goal of this fork is to deploy Avalon in a restricted aws@emory account. The original version of this presumes full access to a standard AWS account. AWS@emory accounts are restricted and many services are not allowed or only partially available.
 
-# Architecture diagram
+## Architecture diagram
+
 ![](diagram.jpg)
 
-# Getting started
+## Getting started
 
 ## Prerequisites
 
@@ -46,46 +47,11 @@ The goal of this fork is to deploy Avalon in a restricted aws@emory account. The
 
 ## Variables
 
-### There are many variables with the project, the variables are separated into two files: one for AWS and EC2 related settings and another for the Avalon Rails Application
+### Variables are separated into two catagories: AWS Variables and Avalon Application Variables
 
-### AWS Variables
+#### AWS Variables
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| app\_name | n/a | `string` | `"avalon"` | no |
-| application\_fqdn | The fully qualified production domain name. This is name is used only by the application load balancer, not route53.<br>    Note that the template will also create another domain name for streaming that is streaming.{application\_fqdn}. | `string` | n/a | yes |
-| application\_fqdn\_workspace\_insertion\_index | The application fqdn is split into a list at each '.', this variable is the index (first object is 0) where the workspace will be appended.<br>    For example if the application fqdn is 'avr.emory.edu', this variable is set to 0, and the workspace is test, the output will be avr-test.emory.edu.<br>    If the workspace is 'prod' then nothing is appended to the fqdn and the address on the alb would be 'avr.emory.edu'. | `number` | `0` | no |
-| avalon\_admin | n/a | `string` | `"admin@example.com"` | no |
-| avalon\_branch | Controls which github branch of the avalon repo is used by AWS CodeBuild | `string` | `"main"` | no |
-| avalon\_repo | Determines what github repo AWS CodeBuild builds from | `string` | `"https://github.com/emory-libraries/avalon"` | no |
-| aws\_profile | n/a | `string` | `"default"` | no |
-| aws\_region | n/a | `string` | `"us-east-1"` | no |
-| base\_policy\_arns | Additional base policy arns that will be attached to every role the template creates. | `list(string)` | `[]` | no |
-| bastion\_instance\_type | n/a | `string` | `"t2.micro"` | no |
-| certificate\_body\_file | Path the PEM-formatted signed certificate for the avalon website, this will be loaded into ACM and used by the ALB. | `string` | n/a | yes |
-| certificate\_chain\_file | Path to the PEM-formatted interm or chain certificate, some regions may require the chain cert be in 'reverse' format. | `string` | n/a | yes |
-| compose\_docker\_branch | Controls which branch of avalon-docker the compose ec2 will download and unzip during setup | `string` | `"aws_min"` | no |
-| compose\_instance\_type | The instance size of the ec2 that runs the avalon docker containers | `string` | `"t3.large"` | no |
-| compose\_volume\_size | The root volume size of the ec2 that runs the avalon docker containers | `number` | `150` | no |
-| db\_avalon\_username | n/a | `string` | `"dbavalon"` | no |
-| db\_fcrepo\_username | n/a | `string` | `"dbfcrepo"` | no |
-| ec2\_keyname | The name of the key in AWS that the ec2 will use for SSH login | `string` | n/a | yes |
-| ec2\_private\_keyfile | Path to the ec2 private key file, this will allow you to SSH inside the EC2 and run commands The key should have '0600' file permission. | `string` | n/a | yes |
-| email\_comments | n/a | `string` | n/a | yes |
-| email\_notification | n/a | `string` | n/a | yes |
-| email\_support | n/a | `string` | n/a | yes |
-| fcrepo\_binary\_bucket\_access\_key | n/a | `string` | n/a | yes |
-| fcrepo\_binary\_bucket\_secret\_key | n/a | `string` | n/a | yes |
-| fcrepo\_binary\_bucket\_username | n/a | `string` | n/a | yes |
-| hosted\_zone\_name | n/a | `string` | n/a | yes |
-| postgres\_version | n/a | `string` | `"10.6"` | no |
-| private\_key\_file | Path to a the PEM-formatted private key for the avalon website. This will be loaded into AWS Certificate Manager(ACM) and used by the Application Load Balancer(ALB). Max supported RSA Key size is 2048 | `string` | n/a | yes |
-| sms\_notification | n/a | `string` | n/a | yes |
-| ssh\_cidr\_blocks | List of cidr blocks the compose ec2 will allow SSH access from, defaults to the entire internet | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
-| stack\_name | n/a | `string` | `"stack"` | no |
-| subnet\_tags | List of Subnet Name tags, these subnets should exist in the provided VPC and there need to be a minimum of two in different availability zones. | `list(string)` | n/a | yes |
-| tags | n/a | `map(string)` | `{}` | no |
-| vpc\_id | VPC that will be used by terraform, this VPC is called via data only, terraform will not attempt to manage the existence of the VPC | `string` | n/a | yes |
+[The values can be found here](readme/aws_var.md)
 
 ### Avalon App Variables
 
@@ -94,13 +60,12 @@ The goal of this fork is to deploy Avalon in a restricted aws@emory account. The
 
 To see the changes Terraform will make:
 
-    terraform plan
+    terraform plan --var-file=prod.tfvars
 
 To actually make those changes:
 
-    terraform apply
+    terraform apply --var-file=prod.tfvars
 
-Be patient, the script attempts to register SSL certificates for your domains and AWS cert validation process can take from 5 to 30 minutes.
 
 ## Extra settings
 
@@ -158,22 +123,3 @@ Now when changes are made in avalonmediasystem/avalon-terraform's `master`, we c
 3. Push changes to GitHub (assuming your GitHub remote is called "origin", as it is by default): `git push origin`
 
 It is important that the `master` branch only recieves updates from upstream, so that it can continue to fast-forward those changes in our repository.
-
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| admin\_ldap\_groups | Comma separated list of LDAP Groups, a user who is a member on any list will login as an administrator. | `list(string)` | `[]` | no |
-| assertion\_cs\_url | The URL at which the SAML assertion should be received. If not provided, defaults to the OmniAuth callback URL | `string` | `""` | no |
-| assertion\_logout\_url | n/a | `string` | `""` | no |
-| csp\_frame\_ancestors | Sets allowed urls for the Content Security Policy header | `string` | `""` | no |
-| fedora\_ssl | Forces the fedora database connection to use ssl. | `bool` | `false` | no |
-| idp\_cert\_file | n/a | `string` | `"Path to IDP's cert, cert should be in PEM format."` | no |
-| idp\_slo\_target\_url | The URL to which the single logout request and response should be sent. This would be on the identity provider. | `string` | `""` | no |
-| idp\_sso\_target\_url | The URL to which the authentication request should be sent. This would be on the identity provider. | `string` | `""` | no |
-| issuer | The name of your application. Some identity providers might need this to establish the identity of the service provider requesting the login. Also know as EntityID | `string` | `""` | no |
-| lti\_auth\_key | This LTI value is the 'username', it identifies the service to Canvas | `string` | `""` | no |
-| lti\_auth\_secret | This LTI value is the 'password' | `string` | `""` | no |
-| secret\_key\_base | n/a | `string` | `"a882b3f2f6144681b2fc0eb23fbdc8904c806fae882a3b6ada84ae83a4d967a9200e1ea27ee6c3049b1ca8bae040d844f04457d0f58c125813d3978a36898675"` | no |
-| sp\_cert\_file | Path to the service provider's cert, in standard PEM format. | `string` | `""` | no |
-| sp\_key\_file | Path to the service provider's private key, in standard PEM format. | `string` | `""` | no |
