@@ -1,0 +1,139 @@
+== Requirements
+
+[cols="a,a",options="header,autowidth"]
+|===
+|Name |Version
+|terraform |>= 0.13
+|===
+
+== Providers
+
+[cols="a,a",options="header,autowidth"]
+|===
+|Name |Version
+|aws |n/a
+|null |n/a
+|random |n/a
+|===
+
+== Inputs
+
+[cols="a,a,a,a,a",options="header,autowidth"]
+|===
+|Name |Description |Type |Default |Required
+|admin_ldap_groups
+|Comma separated list of LDAP Groups, a user who is a member on any list will login as an administrator.
+|`list(string)`
+|`[]`
+|no
+
+|assertion_cs_url
+|The URL at which the SAML assertion should be received. If not provided, defaults to the OmniAuth callback URL
+|`string`
+|`""`
+|no
+
+|assertion_logout_url
+|n/a
+|`string`
+|`""`
+|no
+
+|csp_frame_ancestors
+|Sets allowed urls for the Content Security Policy header
+|`string`
+|`""`
+|no
+
+|fedora_ssl
+|Forces the fedora database connection to use ssl.
+|`bool`
+|`false`
+|no
+
+|idp_cert_file
+|n/a
+|`string`
+|`"Path to IDP's cert, cert should be in PEM format."`
+|no
+
+|idp_slo_target_url
+|The URL to which the single logout request and response should be sent. This would be on the identity provider.
+|`string`
+|`""`
+|no
+
+|idp_sso_target_url
+|The URL to which the authentication request should be sent. This would be on the identity provider.
+|`string`
+|`""`
+|no
+
+|issuer
+|The name of your application. Some identity providers might need this to establish the identity of the service provider requesting the login. Also know as EntityID
+|`string`
+|`""`
+|no
+
+|lti_auth_key
+|This LTI value is the 'username', it identifies the service to Canvas
+|`string`
+|`""`
+|no
+
+|lti_auth_secret
+|This LTI value is the 'password'
+|`string`
+|`""`
+|no
+
+|secret_key_base
+|n/a
+|`string`
+|`"a882b3f2f6144681b2fc0eb23fbdc8904c806fae882a3b6ada84ae83a4d967a9200e1ea27ee6c3049b1ca8bae040d844f04457d0f58c125813d3978a36898675"`
+|no
+
+|sp_cert_file
+|Path to the service provider's cert, in standard PEM format.
+|`string`
+|`""`
+|no
+
+|sp_key_file
+|Path to the service provider's private key, in standard PEM format.
+|`string`
+|`""`
+|no
+
+|===
+
+== Outputs
+
+[cols="a,a",options="header,autowidth"]
+|===
+|Name |Description
+|alb_dns_name |n/a
+|aws_region |n/a
+|cache_address |n/a
+|cache_port |n/a
+|db_avalon_address |n/a
+|db_avalon_password |n/a
+|db_avalon_port |n/a
+|db_avalon_username |n/a
+|db_fcrepo_address |n/a
+|db_fcrepo_password |n/a
+|db_fcrepo_port |n/a
+|db_fcrepo_username |n/a
+|ec2_keyname |n/a
+|ec2_private_ip |n/a
+|ec2_private_keyfile |n/a
+|hosted_zone_name |n/a
+|private_zone_id |n/a
+|public_zone_id |n/a
+|selected_subnets |n/a
+|stack_name |n/a
+|tags |n/a
+|vpc_cidr_block |n/a
+|workspace |n/a
+|===
+

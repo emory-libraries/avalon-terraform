@@ -1,7 +1,7 @@
 variable "admin_ldap_groups" {
   type = list(string)
   default = []
-  description = "Comma seperated list of LDAP Groups, a user who is a member on any list will login as an administrator."
+  description = "Comma separated list of LDAP Groups, a user who is a member on any list will login as an administrator."
 }
 
 variable "assertion_cs_url" {
