@@ -17,6 +17,8 @@ The goal of this fork is to deploy Avalon in a restricted aws@emory account. The
 - Does not attempt to manage users or user permissions. Those must be handled outside of Terraform.
 - Because there is no public DNS, the finished result of running the template is not a website address but rather and internal Application Load Balancer address.
   External DNS must be pointed to this address.
+- Upstream uses AWS Systems Manager (SSM) to store secrets such as database passwords. SSM is not allowed in aws@emory so Secrets Manager(SM) is used instead,
+  [NOT IMPLEMENTED ]
 
 ## Getting started
 
