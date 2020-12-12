@@ -6,13 +6,13 @@ The goal of this fork is to deploy Avalon in a restricted aws@emory account. The
 
 ## Architecture diagram
 
-![Diagram](diagram.jpg)
+![Diagram](readme/diagram.jpg)
 
 ## Key Differences with Upstream
 
 - No VPC is created, VPC is treated as an input variable and not managed by Terraform
-- No Public Route53/DNS, users can assign whatever DNS name they like to the load balancers but DNS must be handled outside of the account.
-  The template will take a certificate and certificate chain file as input.
+- No Public Route53/DNS, users can assign whatever DNS name they like to the load balancers but DNS must be managed outside of the terraform.
+  The template will import signed certificates and chain certificates and load them in ACM.
 - Will work with Private buckets, upstream requires public buckets
 - Does not attempt to manage users or user permissions. Those must be handled outside of Terraform.
 - Because there is no public DNS, the finished result of running the template is not a website address but rather and internal Application Load Balancer address.
@@ -102,6 +102,10 @@ Since Avalon, Fedora, Solr and Nginx are running inside Docker containers manage
 
     docker-compose pull
     docker-compose up -d
+
+A more exact command (region assumed to be us-east-1):
+
+`cd avalon*; docker-compose rm -s -f; $(aws ecr get-login --region us-east-1 --no-include-email) && docker-compose pull && docker-compose up -d`
 
 ## Performance & Cost
 
