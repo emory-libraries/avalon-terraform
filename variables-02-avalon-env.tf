@@ -18,7 +18,7 @@ variable "csp_frame_ancestors" {
   description = "Sets allowed urls for the Content Security Policy header"
 }
 
-variable "fedora_ssl" {
+variable "fcrepo_db_ssl" {
   type = bool
   default = false
   description = "Forces the fedora database connection to use ssl."
