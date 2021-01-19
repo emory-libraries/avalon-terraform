@@ -63,6 +63,7 @@ output "db_avalon_username" {
 
 output "db_avalon_password" {
   value = module.db_avalon.this_db_instance_password
+  sensitive = true
 }
 
 output "db_fcrepo_address" {
@@ -79,6 +80,7 @@ output "db_fcrepo_username" {
 
 output "db_fcrepo_password" {
   value = module.db_fcrepo.this_db_instance_password
+  sensitive = true
 }
 
 output "selected_subnets" {
