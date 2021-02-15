@@ -48,7 +48,6 @@ output "cache_port" {
   value = aws_elasticache_cluster.redis.cache_nodes[0].port
 }
 
-
 output "db_avalon_address" {
   value = module.db_avalon.this_db_instance_address
 }
@@ -61,10 +60,10 @@ output "db_avalon_username" {
   value = module.db_avalon.this_db_instance_username
 }
 
-output "db_avalon_password" {
-  value = module.db_avalon.this_db_instance_password
-  sensitive = true
-}
+# output "db_avalon_password" {
+#   value = module.db_avalon.this_db_instance_password
+#   sensitive = true
+# }
 
 output "db_fcrepo_address" {
   value = module.db_fcrepo.this_db_instance_address
@@ -78,10 +77,10 @@ output "db_fcrepo_username" {
   value = module.db_fcrepo.this_db_instance_username
 }
 
-output "db_fcrepo_password" {
-  value = module.db_fcrepo.this_db_instance_password
-  sensitive = true
-}
+# output "db_fcrepo_password" {
+#   value = module.db_fcrepo.this_db_instance_password
+#   sensitive = true
+# }
 
 output "selected_subnets" {
   value = data.aws_subnet_ids.selected.ids
