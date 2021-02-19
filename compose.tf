@@ -227,6 +227,7 @@ STREAMING_HOST=${local.streaming_appended_fqdn}
 SETTINGS__STREAMING__HTTP_BASE=https://${local.streaming_appended_fqdn}/avalon
 SETTINGS__TIMELINER__TIMELINER_URL=https://${local.appended_fqdn}/timeliner
 SETTINGS__INITIAL_USER=${var.avalon_admin}
+TRACKING_ID=${var.tracking_id}
 ##### LTI Integration Variables ################
 LTI_AUTH_KEY=${var.lti_auth_key}
 LTI_AUTH_SECRET=${var.lti_auth_secret}

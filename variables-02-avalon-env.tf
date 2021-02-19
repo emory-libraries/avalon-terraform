@@ -68,3 +68,7 @@ variable "sp_key_file" {
   description = "Path to the service provider's private key, in standard PEM format."
 }
 
+variable "tracking_id" {
+    default = ""
+    description = "Google Analytics Tracking ID"
+}
