@@ -96,16 +96,9 @@ variable "email_support" {
   type = string
 }
 
-variable "fcrepo_binary_bucket_username" {
+variable "fcrepo_binary_bucket_yaml_file" {
   type = string
-}
-
-variable "fcrepo_binary_bucket_access_key" {
-  type = string
-}
-
-variable "fcrepo_binary_bucket_secret_key" {
-  type = string
+  description = "Path to a YAML file containing the access and secret key for the fcrepo binary. An example exists [here](fcrepo_binary_bucket_example.md)."
 }
 
 variable "hosted_zone_name" {

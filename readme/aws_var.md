@@ -22,9 +22,7 @@
 | email\_comments | n/a | `string` | n/a | yes |
 | email\_notification | n/a | `string` | n/a | yes |
 | email\_support | n/a | `string` | n/a | yes |
-| fcrepo\_binary\_bucket\_access\_key | n/a | `string` | n/a | yes |
-| fcrepo\_binary\_bucket\_secret\_key | n/a | `string` | n/a | yes |
-| fcrepo\_binary\_bucket\_username | n/a | `string` | n/a | yes |
+| fcrepo\_binary\_bucket\_yaml\_file | Path to a YAML file containing the access and secret key for the fcrepo binary. An example exists [here](fcrepo\_binary\_bucket\_example.md). | `string` | `""` | no |
 | hosted\_zone\_name | n/a | `string` | n/a | yes |
 | postgres\_version | n/a | `string` | `"10.6"` | no |
 | private\_key\_file | Path to a the PEM-formatted private key for the avalon website. This will be loaded into AWS Certificate Manager(ACM) and used by the Application Load Balancer(ALB). Max supported RSA Key size is 2048 | `string` | n/a | yes |

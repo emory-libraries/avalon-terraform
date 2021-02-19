@@ -30,4 +30,7 @@ locals {
     appended_fqdn_list = terraform.workspace == "prod" ? local.application_fqdn_list : formatlist("%s-${terraform.workspace}", local.application_fqdn_list)
     appended_fqdn = replace(var.application_fqdn, local.application_fqdn_list[var.application_fqdn_workspace_insertion_index], local.appended_fqdn_list[var.application_fqdn_workspace_insertion_index])
     streaming_appended_fqdn = replace(local.appended_fqdn, local.appended_fqdn_list[var.application_fqdn_workspace_insertion_index], "streaming.${local.appended_fqdn_list[var.application_fqdn_workspace_insertion_index]}")
+    aws_secret_yaml_file = file(var.fcrepo_binary_bucket_yaml_file)
+    fedora_aws_access_key = yamldecode(local.aws_secret_yaml_file)[terraform.workspace]["aws_access_key"]
+    fedora_aws_secret_key = yamldecode(local.aws_secret_yaml_file)[terraform.workspace]["aws_secret_key"]
 }
