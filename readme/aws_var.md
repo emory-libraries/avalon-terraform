@@ -2,7 +2,7 @@
 |------|-------------|------|---------|:--------:|
 | app\_name | n/a | `string` | `"avalon"` | no |
 | application\_fqdn | The fully qualified production domain name. This is name is used only by the application load balancer, not route53.<br>    Note that the template will also create another domain name for streaming that is streaming.{application\_fqdn}. | `string` | n/a | yes |
-| application\_fqdn\_workspace\_insertion\_index | The application fqdn is split into a list at each '.', this variable is the index (first object is 0) where the workspace will be appended.<br>    For example if the application fqdn is 'avr.emory.edu', this variable is set to 0, and the workspace is test, the output will be avr-test.emory.edu.<br>    If the workspace is 'prod' then nothing is appended to the fqdn and the address on the alb would be 'avr.emory.edu'. | `number` | `0` | no |
+| application\_fqdn\_workspace\_insertion\_index | The application fqdn is split into a list at each '.', this variable is the index (first object is 0) where the workspace will be appended.<br>    For example if the application fqdn is 'avr.emory.edu', this variable is set to 0, and the workspace is test, the output will be avr-test.emory.edu.<br>    If the workspace is 'prod' or 'prod2' then nothing is appended to the fqdn and the address on the alb would be 'avr.emory.edu'. | `number` | `0` | no |
 | avalon\_admin | n/a | `string` | `"admin@example.com"` | no |
 | avalon\_branch | Controls which github branch of the avalon repo is used by AWS CodeBuild | `string` | `"main"` | no |
 | avalon\_repo | Determines what github repo AWS CodeBuild builds from | `string` | `"https://github.com/emory-libraries/avalon"` | no |
